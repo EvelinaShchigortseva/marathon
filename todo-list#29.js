@@ -1,69 +1,102 @@
 const list = [];
-const task = {};
 const statuses = ["To Do", "In Progress", "Done"];
-const priority = ["low", "high"];
+const priorities = ["low", "high"];
 let id = 0;
 
-function addTask(taskName, status = "To Do") {
-  task[taskName] = status;
-  id++;
-  task["id"] = id;
+function isCheckingExistenceTask(id) {
+  let isExist = false;
+
+  list.forEach(function (item) {
+    if (item.id == id) {
+      isExist = true;
+    }
+  });
+
+  if (!isExist) {
+    console.log("Такой задачи нет");
+  }
+
+  return isExist;
+}
+
+function isCheckingExistenceStatus(status) {
+  return statuses.includes(status) ? true : console.log("Такого статуса нет");
+}
+
+function addTask(taskName, status = "To Do", priority = "low") {
+  const task = {
+    id: ++id,
+    name: taskName,
+    status: status,
+    priority: priority,
+  };
+
   list.push(task);
-  console.log(list);
 }
 
-function changeTask(taskName, status) {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i][taskName] === undefined) {
-      console.log("Такой задачи нет для изменений");
-    } else if (statuses.includes(status)) {
-      list[i][taskName] = status;
-    } else {
-      console.log("loh");
-    }
-  }
-  console.log(list);
-}
+function changeTask(id, status, priority) {
+  let isExistTask = isCheckingExistenceTask(id);
+  let isExistStatus = isCheckingExistenceStatus(status);
 
-function deleteTask(taskName) {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i][taskName] === undefined) {
-      console.log("Такой задачи нет для удаления");
-    } else {
-      delete list[i];
-      console.log(list);
-    }
+  if (isExistTask && isExistStatus) {
+    list.forEach(function (item) {
+      if (item.id == id) {
+        item.status = status;
+        item.priority = priority;
+      }
+    });
   }
 }
 
-function showList() {
-  for (let status of statuses) {
+function deleteTask(id) {
+  let isExistTask = isCheckingExistenceTask(id);
+
+  if (isExistTask) {
+    list.forEach(function (item, i, arr) {
+      if (item.id == id) {
+        arr.splice(i, 1);
+      }
+    });
+  }
+}
+
+function showList(sortBy) {
+  let arraySort = [];
+
+  if (sortBy == "status") {
+    arraySort = statuses;
+    keyObj = "status";
+  }
+
+  if (sortBy == "priority") {
+    arraySort = priorities;
+    keyObj = "priority";
+  }
+
+  for (let key of arraySort) {
     let count = 0;
-    console.log(`${status}`);
 
-    for (let i = 0; i < list.length; i++) {
+    console.log(`${key}`);
 
-      for (let task in list[i]) {
-
-        if (list[i][task] == `${status}`) {
-          console.log(`-"${task}",`);
-          count++;
-        }
-        
+    list.forEach(function (item) {
+      if (item[keyObj] == `${key}`) {
+        console.log(`-"${item.name}",`);
+        count++;
       }
-      if (count == 0) {
-        console.log("-");
-      }
+    });
+
+    if (count == 0) {
+      console.log("-");
     }
   }
 }
 
-addTask("сварить борщ");
-// addTask("сделать салат фунчоза");
-// addTask("поцеловать Игорешку");
-changeTask("сварить борщ", "Done");
-// changeTask("сделать салат фунчоза", "Done");
-// changeTask("поцеловать Игорешку", "In Progress");
-showList();
-// changeTask('сделать задачку','')
-// deleteTask('сварить борщ')
+addTask("задача 1");
+changeTask("1", "Done", "high");
+addTask("задача 2");
+addTask("задача 3");
+deleteTask("2");
+deleteTask("1");
+addTask("задача 4");
+changeTask("3", "In Progress");
+showList("status");
