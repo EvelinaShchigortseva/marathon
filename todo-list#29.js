@@ -1,26 +1,20 @@
-const list = [];
+let list = [];
 const statuses = ["To Do", "In Progress", "Done"];
 const priorities = ["low", "high"];
 let id = 0;
 
-function isCheckingExistenceTask(id) {
-  let isExist = false;
-
-  list.forEach(function (item) {
-    if (item.id == id) {
-      isExist = true;
-    }
-  });
-
-  if (!isExist) {
-    console.log("Такой задачи нет");
-  }
-
-  return isExist;
+function isTaskExist(id) {
+  return list.some((item) => item.id == id);
 }
 
-function isCheckingExistenceStatus(status) {
-  return statuses.includes(status) ? true : console.log("Такого статуса нет");
+function isStatusExist(status) {
+  return statuses.includes(status);
+}
+
+function resultConsole(isExist) {
+  if (!isExist) {
+    console.log("Не существует ");
+  }
 }
 
 function addTask(taskName, status = "To Do", priority = "low") {
@@ -35,29 +29,26 @@ function addTask(taskName, status = "To Do", priority = "low") {
 }
 
 function changeTask(id, status, priority) {
-  let isExistTask = isCheckingExistenceTask(id);
-  let isExistStatus = isCheckingExistenceStatus(status);
+  let isExistTask = isTaskExist(id);
+  let isExistStatus = isStatusExist(status);
 
   if (isExistTask && isExistStatus) {
-    list.forEach(function (item) {
-      if (item.id == id) {
-        item.status = status;
-        item.priority = priority;
-      }
-    });
+    let task = list.find((item) => item.id == id);
+    task.status = status;
+    if (priority) task.priority = priority;
   }
+  resultConsole(isExistTask);
+  resultConsole(isExistStatus);
 }
 
 function deleteTask(id) {
-  let isExistTask = isCheckingExistenceTask(id);
+  let isExistTask = isTaskExist(id);
 
   if (isExistTask) {
-    list.forEach(function (item, i, arr) {
-      if (item.id == id) {
-        arr.splice(i, 1);
-      }
-    });
+    list = list.filter((item) => item.id != id);
   }
+
+  resultConsole(isTaskExist);
 }
 
 function showList(sortBy) {
@@ -92,11 +83,13 @@ function showList(sortBy) {
 }
 
 addTask("задача 1");
-changeTask("1", "Done", "high");
 addTask("задача 2");
 addTask("задача 3");
+changeTask("2", "Done", "high");
 deleteTask("2");
 deleteTask("1");
 addTask("задача 4");
 changeTask("3", "In Progress");
-showList("status");
+showList("priority");
+
+console.log(list);
