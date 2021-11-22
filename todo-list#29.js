@@ -11,9 +11,15 @@ function isStatusExist(status) {
   return statuses.includes(status);
 }
 
-function resultConsole(isExist) {
+
+function resultConsole(isExist, type) {
   if (!isExist) {
-    console.log("Не существует ");
+    switch(type){
+        case 'id' : console.log("Не существует такой задачи"); break;
+        case 'status' : console.log("Не существует такого статуса"); break;
+        case 'prioryty' : console.log("Не существует такого приоритета"); break;
+    }
+
   }
 }
 
@@ -37,8 +43,8 @@ function changeTask(id, status, priority) {
     task.status = status;
     if (priority) task.priority = priority;
   }
-  resultConsole(isExistTask);
-  resultConsole(isExistStatus);
+  resultConsole(isExistTask, "id" );
+  resultConsole(isExistStatus, "status");
 }
 
 function deleteTask(id) {
@@ -89,7 +95,8 @@ changeTask("2", "Done", "high");
 deleteTask("2");
 deleteTask("1");
 addTask("задача 4");
-changeTask("3", "In Progress");
+changeTask("5", "In Progress");
 showList("priority");
+showList("status");
 
 console.log(list);
