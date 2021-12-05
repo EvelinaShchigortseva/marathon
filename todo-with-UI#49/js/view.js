@@ -31,7 +31,6 @@ UI_ELEMENTS.forms.forEach(function (form) {
       createBlockTask(task_Element.id, task_Element.name, UI_ELEMENTS.task_containers[1]);
     }
 
-    console.log(list);
 }
   }); 
 });
@@ -88,5 +87,5 @@ function changeStatusElement(event) {
     
   }
   changeTask(id_task, task_status);
-  console.log(list);
+
 }
