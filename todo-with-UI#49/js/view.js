@@ -76,17 +76,17 @@ function deleteTaskElement(event) {
 function changeStatusElement(event) {
   let id_task = +event.target.previousElementSibling.id;
   let task_status;
-  let container_task = event.target.parentElement.parentElement;
+  let task_container = event.target.parentElement.parentElement;
   let taskElement = event.target.parentElement;
 
   if (event.target.checked) {
     event.target.previousElementSibling.style.background = "#F4F4F4";
     task_status = "Done";
-    container_task.append(taskElement)
+    task_container.append(taskElement)
   } else {
     event.target.previousElementSibling.style.background = "";
     task_status = "To Do";
-    container_task.prepend(taskElement)
+    task_container.prepend(taskElement)
   }
 
   changeTask(id_task, task_status);
