@@ -15,9 +15,11 @@ forms.forEach(function (form) {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     
-    let task_name = event.target.firstElementChild.value;
-    let status = "To Do";
-    let priority = event.target.parentElement.id;
+    let task_name = event.target.firstElementChild.value.trim();
+    if(task_name){
+        let status = "To Do";
+        let priority = event.target.parentElement.id;
+
     let task_Element = addTask(task_name, status, priority);
 
     form.reset();
@@ -31,6 +33,7 @@ forms.forEach(function (form) {
     }
 
     console.log(list);
+}
   });
 });
 
