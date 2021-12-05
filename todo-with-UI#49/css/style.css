@@ -5,8 +5,8 @@
 a:focus,a:active{outline: none;}
 nav,footer,header,aside{display: block;}
 html,body{height:100%;width:100%;font-size:100%;line-height:1;font-size:14px;-ms-text-size-adjust:100%;-moz-text-size-adjust:100%;-webkit-text-size-adjust:100%;}
-input,button,textarea{font-family:inherit;}
-input::-ms-clear{display: none;}
+/* input,button,textarea{font-family:inherit;} */
+/* input::-ms-clear{display: none;} */
 button{cursor: pointer;}
 button::-moz-focus-inner{padding:0;border:0;}
 a,a:visited{text-decoration: none;}
@@ -35,6 +35,9 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 .main {
 }
 .container {
+display: flex;
+flex-direction: column;
+align-items: center;
   margin: 20px auto;
   width: 500px;
 }
@@ -88,7 +91,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 
 .button_plus {
   position: absolute;
-  right: 50px;
+  right: 15px;
   top: 13px;
   height: 20px;
   width: 20px;
@@ -102,16 +105,17 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 }
 .task {
   position: relative;
+  width: 460px;
 }
 .task_text {
-  width: 460px;
+  width: 100%;
   min-height: 45px;
-
+  display: inline-block;
   background: #ffffff;
   border: 1px solid #989898;
   box-sizing: border-box;
   border-radius: 6px;
-  padding: 10px 40px 10px 40px;
+  padding: 14px 35px 14px 40px;
 
   font-family: Roboto;
   font-style: normal;
@@ -119,6 +123,8 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
   font-size: 18px;
   display: inline-block;
 
+  margin-bottom: 8px;
+ 
 }
 
 .checkbox {
@@ -127,14 +133,21 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
   left: 15px;
   width: 20px;
   height: 20px;
-
   background-color: #fff;
   border-radius: 50%;
+  appearance: none;
+  border: 1px solid #998899;
+  outline: none;
+  cursor: pointer;
+}
+
+.checkbox:checked{
+    background-color: #C4C4C4;
 }
 
 .button_x {
   position: absolute;
-  right: 50px;
+  right: 10px;
   top: 13px;
   height: 20px;
   width: 20px;
