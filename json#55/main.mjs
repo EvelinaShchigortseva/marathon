@@ -1,10 +1,9 @@
 
 import data from './data.json'
 
-let newData = JSON.parse(JSON.stringify(data))
+const newData = JSON.parse(JSON.stringify(data))
 
-let biography = newData.users.map(function (item,i){
-    console.log(item)
+const biography = newData.users.map(function (item,i){
         return `${item.firstName}, born at ${item.dateOfBirth} - ${item.knowsAs}`
 })
 
@@ -13,7 +12,7 @@ biography.forEach(function (item,i){
 })
 
 
-let names = data.users.map(function (item){
+const names = data.users.map(function (item){
     return item.firstName
 })
 
