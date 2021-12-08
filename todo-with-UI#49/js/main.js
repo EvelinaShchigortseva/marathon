@@ -11,15 +11,19 @@ function isStatusExist(status) {
   return statuses.includes(status);
 }
 
-
 function resultConsole(isExist, type) {
   if (!isExist) {
-    switch(type){
-        case 'id' : console.log("Не существует такой задачи"); break;
-        case 'status' : console.log("Не существует такого статуса"); break;
-        case 'prioryty' : console.log("Не существует такого приоритета"); break;
+    switch (type) {
+      case "id":
+        console.log("Не существует такой задачи");
+        break;
+      case "status":
+        console.log("Не существует такого статуса");
+        break;
+      case "priority":
+        console.log("Не существует такого приоритета");
+        break;
     }
-
   }
 }
 
@@ -32,7 +36,7 @@ function addTask(taskName, status = "To Do", priority = "low") {
   };
 
   list.push(task);
-  return task
+  return task;
 }
 
 function changeTask(id, status, priority) {
@@ -44,8 +48,16 @@ function changeTask(id, status, priority) {
     task.status = status;
     if (priority) task.priority = priority;
   }
-  resultConsole(isExistTask, "id" );
+  resultConsole(isExistTask, "id");
   resultConsole(isExistStatus, "status");
+}
+
+function  changeNameTask(id, name){
+  let isExistTask = isTaskExist(id);
+  if(isExistTask){
+    let task = list.find((item) => item.id == id);
+    task.name = name;
+  }
 }
 
 function deleteTask(id) {
@@ -89,9 +101,7 @@ function showList(sortBy) {
   }
 }
 
-
-
-export { list, statuses, priorities, id, addTask, deleteTask, changeTask };
+export { list, statuses, priorities, id, addTask, deleteTask, changeTask, changeNameTask };
 
 // addTask("задача 1");
 // addTask("задача 2");
@@ -105,3 +115,11 @@ export { list, statuses, priorities, id, addTask, deleteTask, changeTask };
 // showList("status");
 
 // console.log(list);
+
+
+addTask("задача 1");
+addTask("задача 2");
+addTask("задача 3");
+ changeNameTask(1, "kdk")
+
+console.log(list)
