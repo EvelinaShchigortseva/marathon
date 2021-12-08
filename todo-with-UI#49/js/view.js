@@ -2,7 +2,6 @@ import {
   addTask,
   deleteTask,
   changeTask,
-  changeNameTask,
 } from "./main.js";
 
 const UI_ELEMENTS = {
@@ -51,10 +50,6 @@ function createBlockTask(id_task, task_name, task_container) {
   task.classList.add("task_text");
   task.textContent = task_name;
   task.setAttribute("id", id_task);
-  task.addEventListener("dblclick", function (event){
-    changeNameTaskElement(event)
-  })
-
 
   const checkboxForTask = document.createElement("input");
   checkboxForTask.classList.add("checkbox");
@@ -104,12 +99,3 @@ function changeStatusElement(event) {
 
   changeTask(task.id, task_status);
 }
-//
-// function changeNameTaskElement(event){
-//   // let id_task = event.target.id
-//   // console.log(event.target.textContent)
-//   // let task_name = event.target.textContent
-//   // let task = changeNameTask(id_task, task_name)
-//   // event.target.textContent =
-//
-// }
