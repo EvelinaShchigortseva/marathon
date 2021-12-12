@@ -29,6 +29,8 @@ UI_Elements.form.addEventListener('submit', function (event) {
             return item.country_id
         }))
         .then (data => UI_Elements.national.textContent= data[0] ? `Country is ${data[0]}` : `Country is undefined`)
+
+        UI_Elements.form.reset();
 })
 
 
