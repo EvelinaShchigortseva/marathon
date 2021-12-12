@@ -33,7 +33,7 @@ UI_Elements.form.addEventListener('submit', function (event) {
         .then (data => data.country.map(function (item){
             return item.country_id
         }))
-        .then (data => data[0])
+        .then (data => data[0] ? data[0] : UI_Elements.national.textContent = 'Country undefined')
         .then (id_country => fetch (getUrlNationalDecryption(serverUrlNationalDecryption,id_country)))
         .then (response => response.json())
         .then (data => UI_Elements.national.textContent = `${data[1][0].name}`)
