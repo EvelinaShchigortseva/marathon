@@ -1,5 +1,5 @@
 
-import {addCity, deleteCity} from "./list.js";
+import {addCity, deleteCity, isCity} from "./list.js";
 
 const UI_ELEMENTS = {
     formSearch : document.querySelector('.form'),
@@ -7,8 +7,19 @@ const UI_ELEMENTS = {
     cityName: document.querySelector('#cityName'),
     imageNow: document.querySelector('.weather_now_img'),
     favoriteCity: document.querySelector('#favorite-city'),
-    favotiteCitiesList: document.querySelector('.favorite-cities-list'),
-    listItem: document.querySelector('.list-item')
+    favoriteCitiesList: document.querySelector('.favorite-cities-list'),
+    listItem: document.querySelector('.list-item'),
+    cityText: document.querySelector('.city_text')
+}
+let isFavorite
+
+function colorFavorite(cityName){
+    if(cityName){
+        UI_ELEMENTS.favoriteCity.style.background = 'url("../img/like-red.svg") no-repeat'
+    }
+    else{
+        UI_ELEMENTS.favoriteCity.style.background = 'url("../img/like.svg") no-repeat'
+    }
 }
 
 function initialState (){
@@ -23,11 +34,13 @@ function catchError(city){
 }
 
 function setNow(city) {
+    let cityName = city.name
     UI_ELEMENTS.degree.textContent = `${parseInt(city.main.temp)}°C`
-    UI_ELEMENTS.cityName.textContent = `${city.name}`
+    UI_ELEMENTS.cityName.textContent = cityName
     let iconUrl = `http://openweathermap.org/img/wn/${city.weather[0].icon}@2x.png`
     UI_ELEMENTS.imageNow.style.background = `url(${iconUrl}) 50% 50% no-repeat`
-    
+    isFavorite = isCity(cityName)
+    colorFavorite(isFavorite)
 }
 
 function setDetails(city) {
@@ -39,23 +52,22 @@ function setForecast(city) {
 }
 
 function deleteCityElement (event){
-    console.log(event.target.previousElementSibling)
-    deleteCity(event.target.previousElementSibling.textContent);
-    UI_ELEMENTS.favoriteCity.style = 'url("../img/like.svg") no-repeat'
+    let cityName = event.target.previousElementSibling.textContent
+    deleteCity(cityName);
+    colorFavorite(!cityName)
     event.target.parentElement.remove();
 
+    let cityText = UI_ELEMENTS.cityText.textContent
+    if(isCity(cityText)){
+        colorFavorite('red')
+    }
 }
 
 function showListCities(event){
     let cityName = event.target.textContent
+    let isFavorite = isCity(cityName)
     fetchQuery(cityName)
-    if(isFavorite){
-        UI_ELEMENTS.favoriteCity.style = 'url("../img/like-red.svg") no-repeat'
-    }
-    else{
-        UI_ELEMENTS.favoriteCity.style = 'url("../img/like.svg") no-repeat'
-    }
-
+    colorFavorite(isFavorite)
 }
 
 function fetchQuery(cityName){
@@ -88,26 +100,26 @@ function createAddedLocationElements (cityName){
     buttonDeleteCity.addEventListener("click", deleteCityElement)
 
     shellCity.append(cityNameElement, buttonDeleteCity)
-    UI_ELEMENTS.favotiteCitiesList.append(shellCity)
+    UI_ELEMENTS.favoriteCitiesList.append(shellCity)
 }
 
 UI_ELEMENTS.formSearch.addEventListener('submit', function (event){
     event.preventDefault()
+
     const cityName = event.target.firstElementChild.value;
     fetchQuery(cityName)
     UI_ELEMENTS.formSearch.reset();
 })
 
 UI_ELEMENTS.favoriteCity.addEventListener('click', function (event){
+
     const cityName = event.target.parentElement.firstElementChild.textContent
-    let flag = addCity(cityName)
-    let isFavorite;
-    if(cityName != 'City not found' && cityName && flag) {
+
+    if(!isCity(cityName) && cityName != 'City not found' && cityName){
+        addCity(cityName)
         createAddedLocationElements(cityName)
-        event.target.style.background = 'url("../img/like-red.svg") no-repeat'
-        return isFavorite = true
+        colorFavorite(cityName)
     }
-   return isFavorite = false
-    
 })
+
 
