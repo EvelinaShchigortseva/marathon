@@ -99,7 +99,84 @@ body{
     align-items:flex-end;
     padding-bottom: 20px;
 }
-.city_text {
+
+
+
+.detail-block{
+    padding: 15px;
+
+}
+
+.details-column{
+    padding-top: 30px;
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.details-column-block{
+    padding-bottom: 10px;
+}
+
+
+.weather_forecast_item{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    width: 265px;
+    height: 120px;
+    font-size: 18px;
+    line-height: 21px;
+    margin: 0 auto;
+    padding: 10px;
+
+
+}
+.weather-forecast-item-temp{
+    display: flex;
+    flex-direction: row;
+
+}
+.weather_forecast_column{
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.weather-forecast-item-date{
+
+    display: flex;
+    height: 50%;
+
+}
+.item-date-day{
+    width: 50%;
+}
+
+.item-date-date{
+    width: 50%;
+
+}
+.item-date-time{
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+.item-temp-info{
+    width: 80%;
+}
+
+.item-temp-weather{
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+.item-weather-img{
+
+}
+
+
+.city_text_block {
     width: 80%;
     font-size: 24px;
     line-height: 28px;
@@ -110,7 +187,10 @@ body{
     width: 24px;
     height: 24px;
 }
-
+.city_text{
+    font-size: 24px;
+    line-height: 28px;
+}
 .tabs {
     border-top: 1px solid black;
 }
@@ -140,14 +220,10 @@ body{
 .tabs-block:target{
     display: block;
 }
-.favotite-cities {
-
+.favorite-cities {
     flex: 0 1 50%;
     font-size: 24px;
     line-height: 28px;
-    
-    
-    
 }
 .list-item{
     height: 30px;
@@ -173,6 +249,5 @@ body{
     height: 20px;
     width: 20px;
     background: url('../img/close-icon.svg') no-repeat;
-
 } 
 

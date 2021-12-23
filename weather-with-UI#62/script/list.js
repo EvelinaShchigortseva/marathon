@@ -16,5 +16,4 @@ function deleteCity(cityName){
     list = list.filter(item => item !== cityName);
 }
 
-
 export { list,addCity, deleteCity, isCity};

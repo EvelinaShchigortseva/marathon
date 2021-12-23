@@ -1,17 +1,37 @@
 
 import {addCity, deleteCity, isCity} from "./list.js";
+import {getFavoriteCities,setFavoriteCity,deleteFavoriteCity} from "./storage.js";
 
 const UI_ELEMENTS = {
     formSearch : document.querySelector('.form'),
     degree: document.querySelector('#degree'),
-    cityName: document.querySelector('#cityName'),
+    cityName: document.querySelectorAll('.city_text'),
     imageNow: document.querySelector('.weather_now_img'),
     favoriteCity: document.querySelector('#favorite-city'),
     favoriteCitiesList: document.querySelector('.favorite-cities-list'),
     listItem: document.querySelector('.list-item'),
-    cityText: document.querySelector('.city_text')
+    cityText: document.querySelector('.city_text'),
+    temp: document.querySelector('.temp'),
+    feels: document.querySelector('.feels'),
+    weather: document.querySelector('.weather'),
+    sunrise: document.querySelector('.sunrise'),
+    sunset: document.querySelector('.sunset'),
 }
 let isFavorite
+
+
+function start() {
+    const cities = getFavoriteCities()
+    cities.forEach((city) => {
+        createAddedLocationElements(city)
+        addCity(city)
+    })
+    fetchQuery(cities[0])
+}
+
+
+start()
+
 
 function colorFavorite(cityName){
     if(cityName){
@@ -34,9 +54,10 @@ function catchError(city){
 }
 
 function setNow(city) {
+    console.log(city)
     let cityName = city.name
     UI_ELEMENTS.degree.textContent = `${parseInt(city.main.temp)}°C`
-    UI_ELEMENTS.cityName.textContent = cityName
+    UI_ELEMENTS.cityName[0].textContent = cityName
     let iconUrl = `http://openweathermap.org/img/wn/${city.weather[0].icon}@2x.png`
     UI_ELEMENTS.imageNow.style.background = `url(${iconUrl}) 50% 50% no-repeat`
     isFavorite = isCity(cityName)
@@ -45,15 +66,37 @@ function setNow(city) {
 
 function setDetails(city) {
 
+    let dateSunset = new Date(city.sys.sunset);
+    let dateSunrise = new Date(city.sys.sunrise);
+
+    let timeSunrise = dateSunrise.toTimeString().split(' ')[0].slice(0, -3);
+    let timeSunset = dateSunset.toTimeString().split(' ')[0].slice(0, -3);
+
+
+    let cityName = city.name;
+    UI_ELEMENTS.cityName[1].textContent = cityName;
+    UI_ELEMENTS.temp.textContent = `${parseInt(city.main.temp)}°C`;
+    UI_ELEMENTS.feels.textContent = `${parseInt(city.main.feels_like)}°C`;
+    UI_ELEMENTS.weather.textContent = city.weather[0].main;
+    UI_ELEMENTS.sunrise.textContent = city.sys.sunrise;
+    UI_ELEMENTS.sunset.textContent = city.sys.sunset;
 }
 
 function setForecast(city) {
 
+    // const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
+    let cityName = city.name;
+    // UI_ELEMENTS.cityName[2].textContent = cityName;
+    // const url = `pro.openweathermap.org/data/2.5/forecast/hourly?q=${cityName}&appid=${apiKey}`
+    // fetch(url)
+    //     .then(response => response.json())
+    //     .then(console.log)
 }
 
 function deleteCityElement (event){
     let cityName = event.target.previousElementSibling.textContent
     deleteCity(cityName);
+    deleteFavoriteCity(cityName)
     colorFavorite(!cityName)
     event.target.parentElement.remove();
 
@@ -69,7 +112,7 @@ function showListCities(event){
     fetchQuery(cityName)
     colorFavorite(isFavorite)
 }
-
+//rename
 function fetchQuery(cityName){
     const serverUrl = 'http://api.openweathermap.org/data/2.5/weather';
     const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
@@ -86,6 +129,7 @@ function fetchQuery(cityName){
 }
 
 function createAddedLocationElements (cityName){
+
     const shellCity = document.createElement("div");
     shellCity.classList.add("list-item");
 
@@ -105,7 +149,6 @@ function createAddedLocationElements (cityName){
 
 UI_ELEMENTS.formSearch.addEventListener('submit', function (event){
     event.preventDefault()
-
     const cityName = event.target.firstElementChild.value;
     fetchQuery(cityName)
     UI_ELEMENTS.formSearch.reset();
@@ -119,6 +162,7 @@ UI_ELEMENTS.favoriteCity.addEventListener('click', function (event){
         addCity(cityName)
         createAddedLocationElements(cityName)
         colorFavorite(cityName)
+        setFavoriteCity(cityName)
     }
 })
 
