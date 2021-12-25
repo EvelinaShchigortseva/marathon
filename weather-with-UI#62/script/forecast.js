@@ -12,14 +12,15 @@ async function setForecast(city) {
     let response = await fetch(url);
     let cityInfo = await response.json()
 
-    let arrayInformation = getDate(cityInfo)
+    let arrayInformation = collectData(cityInfo)
     createItems(arrayInformation)
 }
 
 
-function getDate(cityInfo) {
+function collectData(cityInfo) {
 
     const arrayInformation = []
+
     cityInfo.list.forEach((item, i) =>{
         const objectDataWeather = {
             time: new Date(cityInfo.list[i].dt_txt).toTimeString().split(' ')[0].slice(0, -3),
@@ -44,9 +45,7 @@ function createItems (arrayInformation){
         itemDay.classList.add('weather-forecast-item-date');
         const itemTemp =  document.createElement("div");
         itemTemp.classList.add('weather-forecast-item-temp')
-
-
-
+        
         itemsShell.append(itemDay,itemTemp)
 
         const dayDate = document.createElement('div')
@@ -60,12 +59,11 @@ function createItems (arrayInformation){
 
         const itemTempInfo = document.createElement('div')
         itemTempInfo.classList.add('item-temp-info')
-        // переименовать на мэйн
         const itemTempWeather = document.createElement('div')
         itemTempWeather.classList.add('item-temp-weather')
 
         itemTemp.append(itemTempInfo,itemTempWeather)
-        //
+
         const temp = document.createElement('div')
         temp.textContent = `Temperature: ${arrayItem.temp}`
         const feel_like = document.createElement('div')
