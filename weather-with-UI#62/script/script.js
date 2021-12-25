@@ -1,5 +1,5 @@
 import {addCity, deleteCity, isCity} from "./list.js";
-import {deleteFavoriteCity, getFavoriteCities, setFavoriteCity} from "./storage.js";
+import {deleteFavoriteCity, getFavoriteCities, setFavoriteCity,saveCurrentCity,currentCity} from "./storage.js";
 
 const UI_ELEMENTS = {
     formSearch : document.querySelector('.form'),
@@ -16,36 +16,68 @@ const UI_ELEMENTS = {
     sunrise: document.querySelector('.sunrise'),
     sunset: document.querySelector('.sunset'),
     itemsList: document.querySelector('.weather_forecast_column')
-
-
 }
-let isFavorite
 
 
 function start() {
+    let currentCityy = currentCity()
     const cities = getFavoriteCities()
     cities.forEach((city) => {
         createAddedLocationElements(city)
         addCity(city)
     })
-    fetchQuery(cities[0])
-}
 
+    fetchQuery(currentCityy)
+}
 
 start()
 
 
-function colorFavorite(cityName){
-    if(cityName){
-        UI_ELEMENTS.favoriteCity.style.background = 'url("../img/like-red.svg") no-repeat'
+
+UI_ELEMENTS.formSearch.addEventListener('submit', function (event){
+    event.preventDefault()
+
+    UI_ELEMENTS.itemsList.textContent = ""
+    const cityName = event.target.firstElementChild.value;
+
+    fetchQuery(cityName)
+    saveCurrentCity(cityName)
+    UI_ELEMENTS.formSearch.reset();
+})
+
+UI_ELEMENTS.favoriteCity.addEventListener('click', function (event){
+
+    const cityName = event.target.parentElement.firstElementChild.textContent
+
+    if(!isCity(cityName) && cityName !== 'City not found' && cityName){
+        addCity(cityName)
+        createAddedLocationElements(cityName)
+        colorFavorite(cityName)
+        setFavoriteCity(cityName)
     }
-    else{
-        UI_ELEMENTS.favoriteCity.style.background = 'url("../img/like.svg") no-repeat'
-    }
+})
+
+
+//rename
+function fetchQuery(cityName){
+    const serverUrl = 'http://api.openweathermap.org/data/2.5/weather';
+    const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
+    const url = `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
+
+    fetch(url)
+        .then(response=>response.json())
+        .then(cityInfo => {
+            catchError(cityInfo)
+            setNow(cityInfo)
+            setDetails(cityInfo)
+            setForecast(cityInfo)
+        })
+
 }
 
 function initialState (){
     UI_ELEMENTS.degree.textContent = `...`
+    colorFavorite(false);
 
 }
 
@@ -58,7 +90,7 @@ function catchError(city){
 }
 
 function setNow(city) {
-
+    let isFavorite
     let cityName = city.name
     UI_ELEMENTS.degree.textContent = `${parseInt(city.main.temp)}°C`
     UI_ELEMENTS.cityName[0].textContent = cityName
@@ -66,6 +98,62 @@ function setNow(city) {
     UI_ELEMENTS.imageNow.style.background = `url(${iconUrl}) 50% 50% no-repeat`
     isFavorite = isCity(cityName)
     colorFavorite(isFavorite)
+}
+
+
+
+
+function createAddedLocationElements (cityName){
+
+    const shellCity = document.createElement("div");
+    shellCity.classList.add("list-item");
+
+    const cityNameElement = document.createElement('div')
+    cityNameElement.textContent = cityName
+    cityNameElement.addEventListener('click', showListCities)
+
+    const buttonDeleteCity = document.createElement("input");
+    buttonDeleteCity.classList.add("button_x");
+    buttonDeleteCity.setAttribute("type", "button");
+    buttonDeleteCity.setAttribute("value", "");
+    buttonDeleteCity.addEventListener("click", deleteCityElement)
+
+    shellCity.append(cityNameElement, buttonDeleteCity)
+    UI_ELEMENTS.favoriteCitiesList.append(shellCity)
+}
+
+
+function deleteCityElement (event){
+    let cityName = event.target.previousElementSibling.textContent
+    deleteCity(cityName);
+    deleteFavoriteCity(cityName)
+    colorFavorite(!cityName)
+    event.target.parentElement.remove();
+
+    let cityText = UI_ELEMENTS.cityText.textContent
+    if(isCity(cityText)){
+        colorFavorite('red')
+    }
+}
+
+function showListCities(event){
+    UI_ELEMENTS.itemsList.textContent = ""
+    let cityName = event.target.textContent
+    let isFavorite = isCity(cityName)
+    fetchQuery(cityName)
+    colorFavorite(isFavorite)
+    saveCurrentCity(cityName)
+}
+
+
+
+function colorFavorite(cityName){
+    if(cityName){
+        UI_ELEMENTS.favoriteCity.style.background = 'url("../img/like-red.svg") no-repeat'
+    }
+    else{
+        UI_ELEMENTS.favoriteCity.style.background = 'url("../img/like.svg") no-repeat'
+    }
 }
 
 function setDetails(city) {
@@ -87,8 +175,6 @@ function setDetails(city) {
 
 function setForecast(city) {
 
-
-
     let cityName = city.name;
     const serverUrl = 'http://api.openweathermap.org/data/2.5/forecast';
     const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
@@ -103,13 +189,11 @@ function setForecast(city) {
         ).then(cityInfo => createItems(cityInfo))
 
 
-
 }
 
 
-
 function getDate(cityInfo) {
-    console.log(cityInfo.list)
+
     const massItem = []
     cityInfo.list.forEach((item, i) =>{
         const arrayItem = {
@@ -118,6 +202,7 @@ function getDate(cityInfo) {
             temp: parseInt(cityInfo.list[i].main.temp),
             feelsLike: parseInt(cityInfo.list[i].main.feels_like),
             weather: cityInfo.list[i].weather[0].main,
+            weather_img: cityInfo.list[i].weather[0].icon,
         }
         massItem.push(arrayItem)
     })
@@ -166,10 +251,11 @@ function createItems (massItem){
         const weather = document.createElement('div')
         weather.classList.add('item-weather')
         weather.textContent = arrayItem.weather
-        const weather_img = document.createElement('div')
+        const weather_img = document.createElement('img')
         weather_img.classList.add('item-weather-img')
+        weather_img.src = `http://openweathermap.org/img/wn/${arrayItem.weather_img}@2x.png`
 
-        itemTempWeather.append(weather,weather_img)
+        itemTempWeather.prepend(weather,weather_img)
 
         UI_ELEMENTS.itemsList.append(itemsShell)
     })
@@ -178,81 +264,7 @@ function createItems (massItem){
 
 
 
-function deleteCityElement (event){
-    let cityName = event.target.previousElementSibling.textContent
-    deleteCity(cityName);
-    deleteFavoriteCity(cityName)
-    colorFavorite(!cityName)
-    event.target.parentElement.remove();
 
-    let cityText = UI_ELEMENTS.cityText.textContent
-    if(isCity(cityText)){
-        colorFavorite('red')
-    }
-}
 
-function showListCities(event){
-    UI_ELEMENTS.itemsList.textContent = ""
-    let cityName = event.target.textContent
-    let isFavorite = isCity(cityName)
-    fetchQuery(cityName)
-    colorFavorite(isFavorite)
-}
-//rename
-function fetchQuery(cityName){
-    const serverUrl = 'http://api.openweathermap.org/data/2.5/weather';
-    const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
-    const url = `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`;
-
-    fetch(url)
-        .then(response=>response.json())
-        .then(cityInfo => {
-            catchError(cityInfo)
-            setNow(cityInfo)
-            setDetails(cityInfo)
-            setForecast(cityInfo)
-        })
-}
-
-function createAddedLocationElements (cityName){
-
-    const shellCity = document.createElement("div");
-    shellCity.classList.add("list-item");
-
-    const cityNameElement = document.createElement('div')
-    cityNameElement.textContent = cityName
-    cityNameElement.addEventListener('click', showListCities)
-
-    const buttonDeleteCity = document.createElement("input");
-    buttonDeleteCity.classList.add("button_x");
-    buttonDeleteCity.setAttribute("type", "button");
-    buttonDeleteCity.setAttribute("value", "");
-    buttonDeleteCity.addEventListener("click", deleteCityElement)
-
-    shellCity.append(cityNameElement, buttonDeleteCity)
-    UI_ELEMENTS.favoriteCitiesList.append(shellCity)
-}
-
-UI_ELEMENTS.formSearch.addEventListener('submit', function (event){
-    event.preventDefault()
-
-    UI_ELEMENTS.itemsList.textContent = ""
-    const cityName = event.target.firstElementChild.value;
-
-    fetchQuery(cityName)
-    UI_ELEMENTS.formSearch.reset();
-})
-
-UI_ELEMENTS.favoriteCity.addEventListener('click', function (event){
-
-    const cityName = event.target.parentElement.firstElementChild.textContent
-
-    if(!isCity(cityName) && cityName !== 'City not found' && cityName){
-        addCity(cityName)
-        createAddedLocationElements(cityName)
-        colorFavorite(cityName)
-        setFavoriteCity(cityName)
-    }
-})
 
 
