@@ -14,12 +14,14 @@ function getFavoriteCities(){
     const citiesString = localStorage.getItem('cities')
     return citiesString ? citiesString.split(',') : []
 }
+
 function getCurrentCity(){
     const currentCityString = localStorage.getItem('currentCity')
     return currentCityString ? currentCityString.split(',') : []
 }
 
-function saveCurrentCity(currentCityString){
+function setCurrentCity(currentCityString){
  return localStorage.setItem('currentCity', currentCityString)
 }
-export {setFavoriteCity,deleteFavoriteCity,getFavoriteCities, saveCurrentCity,getCurrentCity}
+
+export {setFavoriteCity,deleteFavoriteCity,getFavoriteCities, setCurrentCity,getCurrentCity}

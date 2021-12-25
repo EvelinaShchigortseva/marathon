@@ -1,5 +1,5 @@
 import {deleteCity, isCity} from "./list.js";
-import {deleteFavoriteCity, saveCurrentCity} from "./storage.js";
+import {deleteFavoriteCity, setCurrentCity} from "./storage.js";
 import {UI_ELEMENTS,getWeatherInformation} from './script.js'
 import {colorFavorite} from './now.js'
 
@@ -10,7 +10,7 @@ function showFavoriteCity(event){
     let isFavorite = isCity(cityName)
     getWeatherInformation(cityName)
     colorFavorite(isFavorite)
-    saveCurrentCity(cityName)
+    setCurrentCity(cityName)
 }
 
 function createAddedFavoriteCitiesElements (cityName){

@@ -1,5 +1,5 @@
 import {addCity, isCity} from "./list.js";
-import {getFavoriteCities, setFavoriteCity,saveCurrentCity,getCurrentCity} from "./storage.js";
+import {getFavoriteCities, setFavoriteCity,setCurrentCity,getCurrentCity} from "./storage.js";
 import {setNow, colorFavorite} from "./now.js";
 import {setDetails} from "./details.js";
 import {setForecast} from "./forecast.js";
@@ -45,7 +45,7 @@ UI_ELEMENTS.formSearch.addEventListener('submit', function (event){
     const cityName = event.target.firstElementChild.value;
 
     getWeatherInformation(cityName)
-    saveCurrentCity(cityName)
+    setCurrentCity(cityName)
 
     UI_ELEMENTS.formSearch.reset();
 })
