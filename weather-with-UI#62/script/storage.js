@@ -21,7 +21,7 @@ function getCurrentCity(){
 }
 
 function setCurrentCity(currentCityString){
- return localStorage.setItem('currentCity', currentCityString)
+    return localStorage.setItem('currentCity', currentCityString)
 }
 
-export {setFavoriteCity,deleteFavoriteCity,getFavoriteCities, setCurrentCity,getCurrentCity}
+export {setFavoriteCity, deleteFavoriteCity, getFavoriteCities, setCurrentCity, getCurrentCity}

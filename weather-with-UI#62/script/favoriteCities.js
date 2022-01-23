@@ -3,11 +3,12 @@ import {deleteFavoriteCity, setCurrentCity} from "./storage.js";
 import {UI_ELEMENTS,getWeatherInformation} from './script.js'
 import {colorFavorite} from './now.js'
 
-
 function showFavoriteCity(event){
     UI_ELEMENTS.itemsList.textContent = ""
+
     let cityName = event.target.textContent
     let isFavorite = isCity(cityName)
+
     getWeatherInformation(cityName)
     colorFavorite(isFavorite)
     setCurrentCity(cityName)
@@ -32,17 +33,20 @@ function createAddedFavoriteCitiesElements (cityName){
     UI_ELEMENTS.favoriteCitiesList.append(shellCity)
 }
 
-
 function deleteFavoriteCityElement (event){
     let cityName = event.target.previousElementSibling.textContent
+
     deleteCity(cityName);
     deleteFavoriteCity(cityName)
     colorFavorite(!cityName)
+
     event.target.parentElement.remove();
 
     let cityText = UI_ELEMENTS.cityText.textContent
+    
     if(isCity(cityText)){
         colorFavorite('red')
     }
 }
+
 export { createAddedFavoriteCitiesElements, deleteFavoriteCityElement}

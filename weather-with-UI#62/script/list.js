@@ -1,6 +1,5 @@
 let list = []
 
-
 function isCity(cityName){
     return list.includes(cityName);
 }
@@ -10,10 +9,8 @@ function addCity(cityName){
       list.push(cityName)
 }}
 
-
-
 function deleteCity(cityName){
     list = list.filter(item => item !== cityName);
 }
 
-export { list,addCity, deleteCity, isCity};
+export {list, addCity, deleteCity, isCity};

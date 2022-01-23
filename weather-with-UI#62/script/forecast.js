@@ -1,10 +1,20 @@
-import {UI_ELEMENTS} from "./script.js";
+import {UI_ELEMENTS, apiKey} from "./script.js";
+import {correctDate} from "./details.js"
+
+function WeatherData(city){
+    this.time = correctDate(city.dt_txt)
+    this.day =new Date(city.dt_txt).toDateString().split(' ').reverse().slice(1,3).join(' ');
+    this.temp = parseInt(city.main.temp);
+    this.feelsLike=parseInt(city.main.feels_like);
+    this.weather=city.weather[0].main;
+    this.weather_img = city.weather[0].icon;
+}
 
 async function setForecast(city) {
 
     let cityName = city.name;
+
     const serverUrl = 'http://api.openweathermap.org/data/2.5/forecast';
-    const apiKey = 'f660a2fb1e4bad108d6160b7f58c555f';
     const url = `${serverUrl}?q=${cityName}&appid=${apiKey}&units=metric`
 
     UI_ELEMENTS.cityName[2].textContent = cityName;
@@ -16,22 +26,15 @@ async function setForecast(city) {
     createItems(arrayInformation)
 }
 
-
 function collectData(cityInfo) {
 
     const arrayInformation = []
-
-    cityInfo.list.forEach((item, i) =>{
-        const objectDataWeather = {
-            time: new Date(cityInfo.list[i].dt_txt).toTimeString().split(' ')[0].slice(0, -3),
-            day: new Date(cityInfo.list[i].dt_txt).toDateString().split(' ').reverse().slice(1,3).join(' '),
-            temp: parseInt(cityInfo.list[i].main.temp),
-            feelsLike: parseInt(cityInfo.list[i].main.feels_like),
-            weather: cityInfo.list[i].weather[0].main,
-            weather_img: cityInfo.list[i].weather[0].icon,
-        }
+    
+    cityInfo.list.forEach((city) =>{
+        const objectDataWeather = new WeatherData(city)
         arrayInformation.push(objectDataWeather)
     })
+   
     return arrayInformation
 
 }
@@ -45,7 +48,7 @@ function createItems (arrayInformation){
         itemDay.classList.add('weather-forecast-item-date');
         const itemTemp =  document.createElement("div");
         itemTemp.classList.add('weather-forecast-item-temp')
-        
+
         itemsShell.append(itemDay,itemTemp)
 
         const dayDate = document.createElement('div')
