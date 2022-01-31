@@ -9,10 +9,8 @@ UI_ELEMENTS.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const startDate = e.target.firstElementChild.value;
     const endDate = format(new Date(), "yyyy-MM-dd'T'HH:mm")
-    const IntervalDateObject = intervalToDuration({start: parseISO(startDate) ,end:  parseISO(endDate) })
-    const result =  `Years:${IntervalDateObject.years}  Months:${IntervalDateObject.months}  Days:${IntervalDateObject.days}  Hours:${IntervalDateObject.hours}`
-    UI_ELEMENTS.input_response.textContent = result
-   
+    const {years, months, days, hours} = intervalToDuration({start: parseISO(startDate) ,end:  parseISO(endDate) })
+    UI_ELEMENTS.input_response.textContent = `Years:${years}  Months:${months}  Days:${days}  Hours:${hours}`
 })
 
 
