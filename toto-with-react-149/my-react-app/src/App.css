@@ -1,0 +1,84 @@
+.App {
+  text-align: center;
+}
+
+
+.header {
+  text-align: center;
+  /*font-family: Roboto;*/
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 21px;
+  /*color: #fff;*/
+  padding: 15px;
+  /* margin-bottom: 12px; */
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+  width: 500px;
+}
+
+.form_task {
+  position: relative;
+}
+.task_label {
+  text-align: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000000;
+  margin-bottom: 12px;
+}
+.input_task {
+  width: 460px;
+  height: 45px;
+  background: #ffffff;
+  border: 1px solid #989898;
+  box-sizing: border-box;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  /*font-family: Roboto;*/
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+  padding-left: 25px;
+  padding-right: 35px;
+
+  color: #000000;
+}
+
+.done{
+  background-color: #989898;
+}
+/*.input_task::placeholder {*/
+/*  !*font-family: Roboto;*!*/
+/*  font-style: normal;*/
+/*  font-weight: normal;*/
+/*  font-size: 18px;*/
+/*  line-height: 21px;*/
+/*  !* identical to box height *!*/
+/*  padding-left: 5px;*/
+/*  color: #bbbbbb;*/
+/*}*/
+
+.button {
+  position: absolute;
+  right: 15px;
+  top: 13px;
+  height: 20px;
+  width: 20px;
+}
+
+.checkbox{
+  position: absolute;
+  left: 7px;
+  top: 13px;
+}
