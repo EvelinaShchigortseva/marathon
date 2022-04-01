@@ -3,7 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {addFavoriteCityAction} from "../store/favoriteCitiesReducer";
 
 
-const Now = ({weatherInformation}) => {
+const Now = () => {
+    const weatherInformation = useSelector(state => state.weatherInformation.weatherInformation)
     const dispatch = useDispatch()
     const iconUrl = `http://openweathermap.org/img/wn/${weatherInformation.weather[0].icon}@2x.png`;
     const favoriteCities = useSelector(state => state.favoriteCities.favoriteCities)

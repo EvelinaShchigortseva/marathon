@@ -1,17 +1,22 @@
 import React, {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {getCurrentCityAction} from "../store/currentCityRedicer";
+import {requestWeatherInformation} from "../store/asyncAction/weatherInformation";
+import {requestWeatherInformationForecast} from "../store/asyncAction/weatherInformationForecast";
 
-const SearchForm = ({value, saveCity}) => {
+const SearchForm = () => {
     const [cityName, setCityName] = useState("");
-
-
-    const city = useSelector(state => state.currentCity.cityName)
     const dispatch = useDispatch()
-
 
     const addCurrentCity = (city) => {
         dispatch(getCurrentCityAction(city))
+        getWeatherInformation(city)
+
+    }
+
+    const getWeatherInformation = (city) => {
+        dispatch(requestWeatherInformation(city))
+        dispatch(requestWeatherInformationForecast(city))
     }
 
     const handleChange = (e) => {
@@ -23,10 +28,9 @@ const SearchForm = ({value, saveCity}) => {
 
         if (cityName) {
             addCurrentCity(cityName)
-            console.log(city)
         }
-
         e.preventDefault();
+
     };
 
     return (

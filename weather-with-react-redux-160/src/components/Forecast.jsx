@@ -1,11 +1,12 @@
 import React from "react";
 import {correctDate} from "../helpers";
+import {useSelector} from "react-redux";
 
-const Forecast = ({informationForecast}) => {
+const Forecast = () => {
     function getUrlImg(icon) {
         return `http://openweathermap.org/img/wn/${icon}@2x.png`;
     }
-
+    const informationForecast = useSelector(state => state.weatherInformationForecast.weatherInformationForecast)
     return (
         <div className="wrapper">
             <div className="city_text">{informationForecast.name}</div>

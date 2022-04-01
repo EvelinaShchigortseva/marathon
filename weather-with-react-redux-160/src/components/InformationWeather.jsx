@@ -5,7 +5,7 @@ import {useState} from "react";
 import Details from "./Details";
 import Forecast from "./Forecast";
 
-const InformationWeather = ({weatherInformation, addCity, informationForecast,}) => {
+const InformationWeather = () => {
     const [currentPage, setCurrentPage] = useState("");
 
     let current;
@@ -13,11 +13,11 @@ const InformationWeather = ({weatherInformation, addCity, informationForecast,})
     if (currentPage === "") current = <div> Введите название города </div>;
     else if (currentPage === "Now")
         current = (
-            <Now weatherInformation={weatherInformation} addFavoriteCity={addCity}/>
+            <Now />
         );
     else if (currentPage === "Forecast")
-        current = <Forecast informationForecast={informationForecast}/>;
-    else current = <Details weatherInformation={weatherInformation}/>;
+        current = <Forecast />;
+    else current = <Details />;
 
     return (
         <div className="information-weather">
